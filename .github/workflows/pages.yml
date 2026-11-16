@@ -1,0 +1,33 @@
+name: Pubblica il sito ArchiFaro
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'docs/**'
+      - '.github/workflows/pages.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency:
+  group: pages
+  cancel-in-progress: true
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Scarica i file
+        uses: actions/checkout@v4
+      - name: Configura Pages
+        uses: actions/configure-pages@v5
+      - name: Carica il sito statico
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: docs
+      - name: Pubblica il sito
+        id: deployment
+        uses: actions/deploy-pages@v4

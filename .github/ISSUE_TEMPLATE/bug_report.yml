@@ -1,0 +1,29 @@
+name: Segnalazione bug
+about: Segnala un problema della Beta senza pubblicare documenti privati
+title: '[BUG] '
+labels: ['bug']
+body:
+  - type: markdown
+    attributes:
+      value: 'Non allegare documenti, percorsi personali o dati riservati.'
+  - type: input
+    id: version
+    attributes:
+      label: Versione
+      placeholder: 5.0.28 Beta
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Passi per riprodurre il problema
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Comportamento atteso
+  - type: textarea
+    id: actual
+    attributes:
+      label: Comportamento osservato
