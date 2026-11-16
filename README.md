@@ -39,7 +39,7 @@ I collegamenti puntano direttamente ai file nella sezione **Assets** di GitHub R
 
 ## Sito web
 
-La cartella [`docs/`](docs/) contiene la landing page statica pubblicata con GitHub Pages e gli asset SVG originali. Non sono necessari server, database, CDN o installazioni di Node.
+Il **sito ufficiale** è [`index.html`](index.html) nella radice con gli asset originali in [`assets/`](assets/). La cartella [`docs/`](docs/) conserva una versione alternativa, ma il workflow di pubblicazione usa **solo il file principale della radice**. Nessun server, CDN, database o Node è necessario.
 
 ## Feedback e sicurezza
 
