@@ -131,10 +131,10 @@
         <div class="reveal"><span class="kicker">La Beta è il primo viaggio</span><h2 id="titolo-download" class="section-title display">Il prossimo archivio<br>parte da qui.</h2><p class="start-description">ArchiFaro è pensato per Windows e può essere usato in versione installabile o portable. Per cominciare, prova le cartelle DEMO incluse nel pacchetto: sono il modo più sicuro per conoscere il programma.</p>
           <div class="start-checks"><div class="start-check"><svg class="icon"><use href="#i-check"/></svg><span>Windows 10/11 a 64 bit</span></div><div class="start-check"><svg class="icon"><use href="#i-check"/></svg><span>Applicazione locale: i documenti non vengono inviati a server ArchiFaro</span></div><div class="start-check"><svg class="icon"><use href="#i-check"/></svg><span>Archivi Essenziale, Completo o Personalizzato</span></div><div class="start-check"><svg class="icon"><use href="#i-check"/></svg><span>Beta di prova: test manuale completo su Windows ancora da completare</span></div></div>
         </div>
-        <div class="download-panel reveal"><h3>Scegli come iniziare.</h3><p>Il link ufficiale verrà attivato dopo il collaudo Windows e la pubblicazione della release. Puoi già esplorare funzioni e istruzioni.</p>
+        <div class="download-panel reveal"><h3>Scegli come iniziare.</h3><p>La Beta 5.0.28 è disponibile per il download. Scegli la versione Installabile o Portable. Gli eseguibili non sono firmati digitalmente e il collaudo completo su Windows è ancora in corso.</p>
           <div class="edition"><div class="edition-label"><svg class="icon"><use href="#i-desktop"/></svg><div><strong>Installabile</strong><small>Setup guidato · ZIP da estrarre</small></div></div><button class="button button-primary" data-download="installer" type="button">Download <svg class="icon"><use href="#i-download"/></svg></button></div>
           <div class="edition"><div class="edition-label"><svg class="icon"><use href="#i-box"/></svg><div><strong>Portable</strong><small>Avvio da cartella · nessun setup</small></div></div><button class="button button-outline" data-download="portable" type="button">Download <svg class="icon"><use href="#i-download"/></svg></button></div>
-          <p class="status-line">Stato: Beta gratuita 5.0.28 · download in preparazione</p><div class="notice" id="download-notice" aria-live="polite" role="status">Il link al download non è ancora stato configurato. Verrà attivato dopo la pubblicazione della release.</div><a class="guide-link" data-project-link href="#feedback">Documentazione e repository <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+          <p class="status-line">Stato: Beta gratuita 5.0.28 · versione preliminare per Windows 10/11 x64 · collaudo manuale ancora necessario.</p><div class="notice" id="download-notice" aria-live="polite" role="status">Il download non è al momento disponibile. Consulta la pagina della release.</div><a class="guide-link" href="https://github.com/user-attachments/files/34923757/ArchiFaro_5.0.28_SHA256SUMS.txt" target="_blank" rel="noopener noreferrer">Verifica integrità: checksum SHA-256 <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></a><br><a class="guide-link" href="https://github.com/Iannaman/ArchiFaro/releases/tag/v5.0.28-beta" target="_blank" rel="noopener noreferrer">Dettagli e note della release 5.0.28 <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></a>
         </div>
       </div>
     </section>
@@ -147,8 +147,8 @@
     /* CONFIGURAZIONE RAPIDA — sostituisci soltanto i valori tra virgolette. */
     const SITE_CONFIG = Object.freeze({
       projectUrl: "https://github.com/Iannaman/ArchiFaro",       // esempio: https://github.com/TUO-UTENTE/ArchiFaro
-      installerUrl: "",     // link all'asset pubblico ArchiFaro_5.0.28_Installabile.zip
-      portableUrl: ""       // link all'asset pubblico ArchiFaro_5.0.28_Portable.zip
+      installerUrl: "https://github.com/user-attachments/files/34923762/ArchiFaro_5.0.28_Installabile.zip",     // allegato verificato nella descrizione della release ufficiale
+      portableUrl: "https://github.com/user-attachments/files/34923760/ArchiFaro_5.0.28_Portable.zip"       // allegato verificato nella descrizione della release ufficiale
     });
 
     document.getElementById('year').textContent = new Date().getFullYear();

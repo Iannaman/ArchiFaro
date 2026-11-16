@@ -4,7 +4,7 @@
 
 **Stato:** Beta gratuita · **Versione descritta:** 5.0.28 · **Piattaforma:** Windows x64 · **Codice applicativo:** proprietario, non pubblicato.
 
-🌊 **[Scopri il sito ArchiFaro](https://iannaman.github.io/ArchiFaro/)** *(sarà raggiungibile dopo l'attivazione di GitHub Pages)*
+🌊 **[Scopri il sito ArchiFaro](https://iannaman.github.io/ArchiFaro/)**
 
 ## Come funziona
 
@@ -27,7 +27,15 @@ La scansione del grafo e della dashboard non cambia i file. L'analisi non utiliz
 
 ## Download Beta
 
-I pacchetti per Windows saranno disponibili in **[Releases](https://github.com/Iannaman/ArchiFaro/releases)** dopo il collaudo manuale completo. Non ci sono, al momento, link ai file binari pubblicati in questo repository.
+Sono disponibili i pacchetti **Beta 5.0.28** per Windows 10/11 x64, attualmente come allegati pubblici nella descrizione della [release `v5.0.28-beta`](https://github.com/Iannaman/ArchiFaro/releases/tag/v5.0.28-beta):
+
+- **[Installabile (.zip)](https://github.com/user-attachments/files/34923762/ArchiFaro_5.0.28_Installabile.zip)** — contiene il setup da estrarre.
+- **[Portable (.zip)](https://github.com/user-attachments/files/34923760/ArchiFaro_5.0.28_Portable.zip)** — avvio senza installazione, dopo estrazione.
+- **[Checksum SHA-256](https://github.com/user-attachments/files/34923757/ArchiFaro_5.0.28_SHA256SUMS.txt)** — per verificare i pacchetti scaricati.
+
+> **Beta / pre-release:** gli eseguibili non sono firmati digitalmente e il collaudo completo in un ambiente Windows reale non è ancora concluso. Prima dell'utilizzo su un archivio importante, prova il programma su una copia di dati DEMO.
+
+Questi link puntano ad **allegati nel testo della release**, non alla sezione GitHub *Assets*. Per una distribuzione stabile e gestibile è preferibile caricare i medesimi ZIP anche come asset ufficiali della release.
 
 ## Sito web
 
