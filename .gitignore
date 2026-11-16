@@ -1,10 +1,23 @@
-# Output locali e temporanei
+# Il repository pubblico ospita soltanto sito e documentazione
+*.exe
+*.dll
+*.msi
+*.pdb
+*.log
+*.bak
+*.tmp
+*.db
+*.sqlite
+*.sqlite3
+*.zip
+*.7z
+*.rar
+.env
+.env.*
+!docs/**
+node_modules/
+dist/
+build/
+__pycache__/
 .DS_Store
 Thumbs.db
-desktop.ini
-*.log
-*.tmp
-.vscode/
-.idea/
-node_modules/
-.DS_Store?
