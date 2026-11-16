@@ -27,15 +27,15 @@ La scansione del grafo e della dashboard non cambia i file. L'analisi non utiliz
 
 ## Download Beta
 
-Sono disponibili i pacchetti **Beta 5.0.28** per Windows 10/11 x64, attualmente come allegati pubblici nella descrizione della [release `v5.0.28-beta`](https://github.com/Iannaman/ArchiFaro/releases/tag/v5.0.28-beta):
+Sono disponibili i pacchetti **Beta 5.0.28** per Windows 10/11 x64, distribuiti come asset ufficiali della [release `v5.0.28-beta`](https://github.com/Iannaman/ArchiFaro/releases/tag/v5.0.28-beta):
 
-- **[Installabile (.zip)](https://github.com/user-attachments/files/34923762/ArchiFaro_5.0.28_Installabile.zip)** — contiene il setup da estrarre.
-- **[Portable (.zip)](https://github.com/user-attachments/files/34923760/ArchiFaro_5.0.28_Portable.zip)** — avvio senza installazione, dopo estrazione.
-- **[Checksum SHA-256](https://github.com/user-attachments/files/34923757/ArchiFaro_5.0.28_SHA256SUMS.txt)** — per verificare i pacchetti scaricati.
+- **[Installabile (.zip)](https://github.com/Iannaman/ArchiFaro/releases/download/v5.0.28-beta/ArchiFaro_5.0.28_Installabile.zip)** — contiene il setup da estrarre.
+- **[Portable (.zip)](https://github.com/Iannaman/ArchiFaro/releases/download/v5.0.28-beta/ArchiFaro_5.0.28_Portable.zip)** — avvio senza installazione, dopo estrazione.
+- **[Checksum SHA-256](https://github.com/Iannaman/ArchiFaro/releases/download/v5.0.28-beta/ArchiFaro_5.0.28_SHA256SUMS.txt)** — per verificare i pacchetti scaricati.
 
 > **Beta / pre-release:** gli eseguibili non sono firmati digitalmente e il collaudo completo in un ambiente Windows reale non è ancora concluso. Prima dell'utilizzo su un archivio importante, prova il programma su una copia di dati DEMO.
 
-Questi link puntano ad **allegati nel testo della release**, non alla sezione GitHub *Assets*. Per una distribuzione stabile e gestibile è preferibile caricare i medesimi ZIP anche come asset ufficiali della release.
+I collegamenti puntano direttamente ai file nella sezione **Assets** di GitHub Releases.
 
 ## Sito web
 
