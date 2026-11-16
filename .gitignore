@@ -1,0 +1,10 @@
+# Output locali e temporanei
+.DS_Store
+Thumbs.db
+desktop.ini
+*.log
+*.tmp
+.vscode/
+.idea/
+node_modules/
+.DS_Store?
