@@ -101,6 +101,12 @@ jobs:
                   if kind=='Installabile' and 'Setup_ArchiFaro.exe' not in files:raise SystemExit('Setup mancante')
                   print(kind, 'verificato', len(files), 'file')
           PY
+      - name: Prepara la versione pubblica del sito
+        if: ${{ github.event_name == 'release' }}
+        uses: actions/checkout@v4
+        with:
+          path: website
+          persist-credentials: true
       - name: Allinea il sito pubblico alla release verificata
         if: ${{ github.event_name == 'release' }}
         env:
@@ -108,7 +114,6 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          git clone --depth 1 "https://x-access-token:${GH_TOKEN}@github.com/Iannaman/ArchiFaro.git" website
           cd website
           python - <<'PY'
           from pathlib import Path
@@ -117,6 +122,11 @@ jobs:
           original=path.read_text(encoding="utf-8")
           tag=os.environ["RELEASE_TAG"]
           version=os.environ["NUMERIC_VERSION"]
+          # Never roll a newer download page back to an older release.
+          current=re.search(r'/releases/download/v([0-9]+\.[0-9]+\.[0-9]+)(?:-beta|-rc)?/ArchiFaro_',original)
+          if current and tuple(map(int,current.group(1).split('.'))) > tuple(map(int,version.split('.'))):
+              print("Older release: site remains on",current.group(1))
+              raise SystemExit(0)
           updated=original
           for kind,ext in (("Installabile","zip"),("Portable","zip"),("SHA256SUMS","txt")):
               pattern=rf'https://github\.com/Iannaman/ArchiFaro/releases/download/v[0-9]+\.[0-9]+\.[0-9]+(?:-beta|-rc)?/ArchiFaro_[0-9]+\.[0-9]+\.[0-9]+_{kind}\.{ext}'
