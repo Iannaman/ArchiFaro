@@ -13,7 +13,7 @@ on:
     paths:
       - '.github/workflows/release-assets.yml'
 permissions:
-  contents: read
+  contents: write
 jobs:
   verify-public-release:
     runs-on: ubuntu-latest
@@ -54,8 +54,34 @@ jobs:
             --pattern "ArchiFaro_${NUMERIC_VERSION}_Installabile.zip" \
             --pattern "ArchiFaro_${NUMERIC_VERSION}_Portable.zip" \
             --pattern "ArchiFaro_${NUMERIC_VERSION}_SHA256SUMS.txt"
-          cd checks
-          sha256sum -c "ArchiFaro_${NUMERIC_VERSION}_SHA256SUMS.txt"
+          python - <<'PY'
+          from pathlib import Path
+          import hashlib, os, re
+          version = os.environ['NUMERIC_VERSION']
+          target = Path('checks')
+          manifest = (target / f'ArchiFaro_{version}_SHA256SUMS.txt').read_text()
+          checks = {}
+          for line in manifest.splitlines():
+              match = re.fullmatch(r'([0-9a-f]{64})\s+([^/\\]+)', line.strip())
+              if match is None:
+                  raise SystemExit('Riga del manifest non valida')
+              digest, name = match.groups()
+              if name in checks:
+                  raise SystemExit('Checksum duplicato')
+              checks[name] = digest
+          expected = {f'ArchiFaro_{version}_Installabile.zip',
+                      f'ArchiFaro_{version}_Portable.zip'}
+          if not expected.issubset(checks):
+              raise SystemExit('Manifest non contiene entrambi i checksum richiesti')
+          for name in sorted(expected):
+              actual = hashlib.sha256((target / name).read_bytes()).hexdigest()
+              if actual != checks[name]:
+                  raise SystemExit(f'SHA-256 non valido: {name}')
+              print(f'{name}: OK')
+          extras = sorted(set(checks) - expected)
+          if extras:
+              print('::warning::Manifest storico include file non distribuiti: ' + ', '.join(extras))
+          PY
       - name: Verifica contenuti ZIP e assenza di sorgenti
         env:
           NUMERIC_VERSION: ${{ steps.version.outputs.numeric }}
@@ -75,6 +101,44 @@ jobs:
                   if kind=='Installabile' and 'Setup_ArchiFaro.exe' not in files:raise SystemExit('Setup mancante')
                   print(kind, 'verificato', len(files), 'file')
           PY
+      - name: Allinea il sito pubblico alla release verificata
+        if: ${{ github.event_name == 'release' }}
+        env:
+          NUMERIC_VERSION: ${{ steps.version.outputs.numeric }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          git clone --depth 1 "https://x-access-token:${GH_TOKEN}@github.com/Iannaman/ArchiFaro.git" website
+          cd website
+          python - <<'PY'
+          from pathlib import Path
+          import os,re
+          path=Path("index.html")
+          original=path.read_text(encoding="utf-8")
+          tag=os.environ["RELEASE_TAG"]
+          version=os.environ["NUMERIC_VERSION"]
+          updated=original
+          for kind,ext in (("Installabile","zip"),("Portable","zip"),("SHA256SUMS","txt")):
+              pattern=rf'https://github\.com/Iannaman/ArchiFaro/releases/download/v[0-9]+\.[0-9]+\.[0-9]+(?:-beta|-rc)?/ArchiFaro_[0-9]+\.[0-9]+\.[0-9]+_{kind}\.{ext}'
+              target=f'https://github.com/Iannaman/ArchiFaro/releases/download/{tag}/ArchiFaro_{version}_{kind}.{ext}'
+              if not re.search(pattern,updated):
+                  raise SystemExit("Collegamento pubblico assente: "+kind)
+              updated=re.sub(pattern,target,updated)
+          updated=re.sub(r'(Stato: Beta (?:gratuita )?)[0-9]+\.[0-9]+\.[0-9]+',
+                         rf'\g<1>{version}',updated)
+          if updated!=original:
+              path.write_text(updated,encoding="utf-8")
+              print("Sito aggiornato per",tag)
+          else:
+              print("Sito già allineato")
+          PY
+          if [[ -n "$(git status --porcelain -- index.html)" ]]; then
+            git config user.name 'github-actions[bot]'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git add index.html
+            git commit -m "Aggiorna download del sito per ${RELEASE_TAG}"
+            git push origin HEAD:main
+          fi
       - name: Riepilogo
         run: |
           {
