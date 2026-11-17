@@ -1,0 +1,85 @@
+name: ArchiFaro - Verifica pacchetti pubblici
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Tag da verificare, ad esempio v5.0.28-beta'
+        required: true
+        default: 'v5.0.28-beta'
+        type: string
+  push:
+    paths:
+      - '.github/workflows/release-assets.yml'
+permissions:
+  contents: read
+jobs:
+  verify-public-release:
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+      RELEASE_TAG: ${{ github.event.release.tag_name || inputs.tag || 'v5.0.28-beta' }}
+    steps:
+      - name: Riconosci la versione
+        id: version
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ ! "$RELEASE_TAG" =~ ^v([0-9]+\.[0-9]+\.[0-9]+)(-beta|-rc)?$ ]]; then
+            echo 'Tag non valido'; exit 1
+          fi
+          echo "numeric=${BASH_REMATCH[1]}" >> "$GITHUB_OUTPUT"
+      - name: Verifica i nomi esatti degli asset
+        env:
+          NUMERIC_VERSION: ${{ steps.version.outputs.numeric }}
+        run: |
+          gh release view "$RELEASE_TAG" --repo Iannaman/ArchiFaro --json assets > assets.json
+          python - <<'PY'
+          import json,os
+          version=os.environ['NUMERIC_VERSION']
+          names={a['name'] for a in json.load(open('assets.json'))['assets']}
+          expected={f'ArchiFaro_{version}_{name}' for name in ('Installabile.zip','Portable.zip','SHA256SUMS.txt')}
+          if names!=expected:raise SystemExit(f'Asset non conformi: mancanti={expected-names}; extra={names-expected}')
+          print('Tre asset ufficiali verificati:',', '.join(sorted(names)))
+          PY
+      - name: Scarica e controlla checksum
+        env:
+          NUMERIC_VERSION: ${{ steps.version.outputs.numeric }}
+        run: |
+          set -euo pipefail
+          mkdir -p checks
+          gh release download "$RELEASE_TAG" --repo Iannaman/ArchiFaro \
+            --dir checks \
+            --pattern "ArchiFaro_${NUMERIC_VERSION}_Installabile.zip" \
+            --pattern "ArchiFaro_${NUMERIC_VERSION}_Portable.zip" \
+            --pattern "ArchiFaro_${NUMERIC_VERSION}_SHA256SUMS.txt"
+          cd checks
+          sha256sum -c "ArchiFaro_${NUMERIC_VERSION}_SHA256SUMS.txt"
+      - name: Verifica contenuti ZIP e assenza di sorgenti
+        env:
+          NUMERIC_VERSION: ${{ steps.version.outputs.numeric }}
+        run: |
+          python - <<'PY'
+          import os,zipfile
+          from pathlib import PurePosixPath,Path
+          n=os.environ['NUMERIC_VERSION']
+          for kind in ('Installabile','Portable'):
+              path=Path('checks')/f'ArchiFaro_{n}_{kind}.zip'
+              with zipfile.ZipFile(path) as z:
+                  files=set(z.namelist())
+                  if not {'ArchiFaro.exe','ArchiFaro.ico'}.issubset(files):raise SystemExit('EXE/ICO mancante')
+                  if any(f.startswith('/') or '..' in PurePosixPath(f).parts or '\\' in f for f in files):raise SystemExit('ZIP path insicuro')
+                  if any(f.endswith(('.go','.syso','.pdb')) or '/Dati_Portable/' in f or 'Sorgenti' in f for f in files):raise SystemExit('Sorgenti/dati trovati')
+                  if kind=='Portable' and 'ArchiFaro.portable' not in files:raise SystemExit('Marker Portable mancante')
+                  if kind=='Installabile' and 'Setup_ArchiFaro.exe' not in files:raise SystemExit('Setup mancante')
+                  print(kind, 'verificato', len(files), 'file')
+          PY
+      - name: Riepilogo
+        run: |
+          {
+            echo '## Verifica GitHub Release completata'
+            echo "Release: **${RELEASE_TAG}**"
+            echo '✔ 3 asset ufficiali, checksum SHA-256 validi, contenuto ZIP controllato.'
+            echo 'Questa verifica non sostituisce firma digitale e collaudo Windows.'
+          } >> "$GITHUB_STEP_SUMMARY"
